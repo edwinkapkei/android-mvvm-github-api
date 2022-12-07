@@ -24,10 +24,10 @@ class UserViewModel(
     private val getGithubUserFollowing: GetGithubUserFollowing
 ) : AndroidViewModel(app) {
 
-    private val githubUser: MutableLiveData<ResourceStatus<GithubUser>> = MutableLiveData()
-    private val userFollowers: MutableLiveData<ResourceStatus<List<GithubFollower>>> =
+    val githubUser: MutableLiveData<ResourceStatus<GithubUser>> = MutableLiveData()
+    val userFollowers: MutableLiveData<ResourceStatus<List<GithubFollower>>> =
         MutableLiveData()
-    private val userFollowing: MutableLiveData<ResourceStatus<List<GithubFollower>>> =
+    val userFollowing: MutableLiveData<ResourceStatus<List<GithubFollower>>> =
         MutableLiveData()
 
     fun getUser(username: String) = viewModelScope.launch(Dispatchers.IO) {
@@ -36,7 +36,11 @@ class UserViewModel(
         try {
             if (isNetworkAvailable(app)) {
                 val apiResult = getGithubUserUseCase.execute(username)
-                githubUser.postValue(apiResult)
+                if (apiResult.data != null) {
+                    githubUser.postValue(ResourceStatus.Success(apiResult.data))
+                } else {
+                    githubUser.postValue(ResourceStatus.Error("An error occured"))
+                }
             } else {
                 githubUser.postValue(ResourceStatus.Error("Internet is not available"))
             }
