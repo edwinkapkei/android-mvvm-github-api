@@ -13,8 +13,16 @@ interface GithubApiService {
     suspend fun getUserByUsername(@Path("username") username: String): Response<GithubUser>
 
     @GET("users/{username}/followers")
-    suspend fun getUserFollowers(@Path("username") username: String): Response<GithubFollower>
+    suspend fun getUserFollowers(
+        @Path("username") username: String,
+        @Query("per_page") perPage: Int,
+        @Query("page") page: Int
+    ): Response<List<GithubFollower>>
 
     @GET("users/{username}/following")
-    suspend fun getUserFollowing(@Path("username") username: String): Response<GithubFollower>
+    suspend fun getUserFollowing(
+        @Path("username") username: String,
+        @Query("per_page") perPage: Int,
+        @Query("page") page: Int
+    ): Response<List<GithubFollower>>
 }
