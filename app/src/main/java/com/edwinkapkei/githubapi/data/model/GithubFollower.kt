@@ -1,9 +1,18 @@
 package com.edwinkapkei.githubapi.data.model
 
 
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(
+    indices = [Index(value = ["login", "ownerUsername"], unique = true)]
+)
 data class GithubFollower(
+    @PrimaryKey(autoGenerate = true)
+    val tableId: Int?,
+    var ownerUsername: String?,
     @SerializedName("avatar_url")
     val avatarUrl: String?,
     @SerializedName("events_url")

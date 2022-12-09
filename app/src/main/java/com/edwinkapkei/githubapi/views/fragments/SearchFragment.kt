@@ -54,7 +54,10 @@ class SearchFragment : Fragment() {
                     putSerializable("github_user", it)
                 }
 
-                findNavController().navigate(R.id.action_searchFragment_to_followersFragment, bundle)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_followersFragment,
+                    bundle
+                )
             }
         }
 
@@ -66,7 +69,10 @@ class SearchFragment : Fragment() {
                     putSerializable("github_user", it)
                 }
 
-                findNavController().navigate(R.id.action_searchFragment_to_followersFragment, bundle)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_followersFragment,
+                    bundle
+                )
             }
         }
 
@@ -79,6 +85,7 @@ class SearchFragment : Fragment() {
                 is ResourceStatus.Success -> {
                     hideProgressBar()
                     response.data?.let {
+                        viewModel.saveUser(it)
                         updateUI(it)
                     }
                 }

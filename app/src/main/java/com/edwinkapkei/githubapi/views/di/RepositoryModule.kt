@@ -1,7 +1,8 @@
 package com.edwinkapkei.githubapi.views.di
 
+import com.edwinkapkei.githubapi.data.repository.UserRepositoryImpl
+import com.edwinkapkei.githubapi.data.repository.dataSource.GithubUserLocalDataSource
 import com.edwinkapkei.githubapi.data.repository.dataSource.GithubUserRemoteDataSource
-import com.edwinkapkei.githubapi.data.repository.dataSource.UserRepositoryImpl
 import com.edwinkapkei.githubapi.domain.repository.GithubUserRepository
 import dagger.Module
 import dagger.Provides
@@ -15,7 +16,10 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideUserRepository(remoteDataSource: GithubUserRemoteDataSource): GithubUserRepository {
-        return UserRepositoryImpl(remoteDataSource)
+    fun provideUserRepository(
+        remoteDataSource: GithubUserRemoteDataSource,
+        localDataSource: GithubUserLocalDataSource
+    ): GithubUserRepository {
+        return UserRepositoryImpl(remoteDataSource, localDataSource)
     }
 }

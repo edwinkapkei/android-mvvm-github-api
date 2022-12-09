@@ -7,12 +7,12 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.edwinkapkei.githubapi.data.model.GithubFollower
 import com.edwinkapkei.githubapi.data.model.GithubUser
 import com.edwinkapkei.githubapi.data.utilities.ResourceStatus
-import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserFollowers
-import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserUseCase
+import com.edwinkapkei.githubapi.domain.usecases.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,6 +20,10 @@ class UserViewModel(
     private val app: Application,
     private val getGithubUserUseCase: GetGithubUserUseCase,
     private val getGithubUserFollowers: GetGithubUserFollowers,
+    private val saveGithubUserUseCase: SaveGithubUserUseCase,
+    private val saveGithubFollowerUseCase: SaveGithubFollowerUseCase,
+    private val getSavedUserUseCase: GetSavedUserUseCase,
+    private val getSavedFollowersUseCase: GetSavedFollowersUseCase
 ) : AndroidViewModel(app) {
 
     val githubUser: MutableLiveData<ResourceStatus<GithubUser>> = MutableLiveData()
@@ -53,7 +57,8 @@ class UserViewModel(
 
             try {
                 if (isNetworkAvailable(app)) {
-                    val apiResult = getGithubUserFollowers.execute(username, followType, perPage, page)
+                    val apiResult =
+                        getGithubUserFollowers.execute(username, followType, perPage, page)
                     userFollowers.postValue(apiResult)
                 } else {
                     userFollowers.postValue(ResourceStatus.Error("Internet is not available"))
@@ -62,6 +67,29 @@ class UserViewModel(
                 userFollowers.postValue(ResourceStatus.Error(e.message.toString()))
             }
         }
+
+    fun saveUser(githubUser: GithubUser) =
+        viewModelScope.launch { saveGithubUserUseCase.execute(githubUser) }
+
+    fun saveUserFollowers(username: String,githubFollowers: List<GithubFollower>) =
+        viewModelScope.launch {
+            for (follower in githubFollowers){
+                follower.ownerUsername = username
+            }
+            saveGithubFollowerUseCase.execute(githubFollowers)
+        }
+
+    fun getSavedUser(username: String) = liveData {
+        getSavedUserUseCase.execute(username).collect() {
+            emit(it)
+        }
+    }
+
+    fun getSavedUserFollowers(username: String) = liveData {
+        getSavedFollowersUseCase.execute(username).collect() {
+            emit(it)
+        }
+    }
 
     @Suppress("DEPRECATION")
     fun isNetworkAvailable(context: Context): Boolean {

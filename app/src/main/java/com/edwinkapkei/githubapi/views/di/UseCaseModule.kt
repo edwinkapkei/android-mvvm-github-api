@@ -1,8 +1,7 @@
 package com.edwinkapkei.githubapi.views.di
 
 import com.edwinkapkei.githubapi.domain.repository.GithubUserRepository
-import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserFollowers
-import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserUseCase
+import com.edwinkapkei.githubapi.domain.usecases.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,5 +22,29 @@ class UseCaseModule {
     @Provides
     fun providesGithubUserFollowers(userRepository: GithubUserRepository): GetGithubUserFollowers {
         return GetGithubUserFollowers(userRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providesSaveUserUseCase(userRepository: GithubUserRepository): SaveGithubUserUseCase {
+        return SaveGithubUserUseCase(userRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providesSaveFollowersUseCase(userRepository: GithubUserRepository): SaveGithubFollowerUseCase {
+        return SaveGithubFollowerUseCase(userRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providesSavedGithubUser(userRepository: GithubUserRepository): GetSavedUserUseCase {
+        return GetSavedUserUseCase(userRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun providesSavedGithubUserFollowers(userRepository: GithubUserRepository): GetSavedFollowersUseCase {
+        return GetSavedFollowersUseCase(userRepository)
     }
 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.edwinkapkei.githubapi.R
+import com.edwinkapkei.githubapi.data.model.GithubFollower
 import com.edwinkapkei.githubapi.data.utilities.ResourceStatus
 import com.edwinkapkei.githubapi.databinding.FragmentFollowersBinding
 import com.edwinkapkei.githubapi.views.MainActivity
@@ -42,7 +43,12 @@ class FollowersFragment : Fragment() {
 
         adapter = FollowerAdapter()
         binding.followersRecycler.adapter = adapter
-        binding.followersRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+        binding.followersRecycler.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                LinearLayoutManager.VERTICAL
+            )
+        )
         binding.followersRecycler.addOnScrollListener(this.onScrollListener)
 
         user.login?.let {
@@ -62,6 +68,7 @@ class FollowersFragment : Fragment() {
                             isLastPage = true
 
                         adapter.updateList(it)
+                        saveUserFollowers(it)
                     }
                 }
                 is ResourceStatus.Error -> {
@@ -74,6 +81,14 @@ class FollowersFragment : Fragment() {
                     showProgressBar()
                 }
             }
+        }
+    }
+
+    private fun saveUserFollowers(githubFollowers: List<GithubFollower>) {
+        val args: FollowersFragmentArgs by navArgs()
+        val user = args.githubUser
+        user.login?.let {
+            viewModel.saveUserFollowers(user.login, githubFollowers)
         }
     }
 

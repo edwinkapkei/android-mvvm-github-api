@@ -1,9 +1,17 @@
 package com.edwinkapkei.githubapi.data.model
 
 
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(
+    indices = [Index(value = ["login"], unique = true)]
+)
 data class GithubUser(
+    @PrimaryKey(autoGenerate = true)
+    val tableId: Int,
     @SerializedName("avatar_url")
     val avatarUrl: String?,
     @SerializedName("bio")
@@ -11,11 +19,11 @@ data class GithubUser(
     @SerializedName("blog")
     val blog: String?,
     @SerializedName("company")
-    val company: Any?,
+    val company: String?,
     @SerializedName("created_at")
     val createdAt: String?,
     @SerializedName("email")
-    val email: Any?,
+    val email: String?,
     @SerializedName("events_url")
     val eventsUrl: String?,
     @SerializedName("followers")
@@ -61,7 +69,7 @@ data class GithubUser(
     @SerializedName("subscriptions_url")
     val subscriptionsUrl: String?,
     @SerializedName("twitter_username")
-    val twitterUsername: Any?,
+    val twitterUsername: String?,
     @SerializedName("type")
     val type: String?,
     @SerializedName("updated_at")
