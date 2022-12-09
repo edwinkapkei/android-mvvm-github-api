@@ -5,7 +5,7 @@ import com.edwinkapkei.githubapi.domain.repository.GithubUserRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetSavedUserUseCase(private val userRepository: GithubUserRepository) {
-     fun execute(username: String) : Flow<GithubUser?>{
-       return userRepository.getSavedUser(username)
+    fun execute(username: String): Flow<GithubUser?> {
+        return userRepository.getSavedUser(username)
     }
 }

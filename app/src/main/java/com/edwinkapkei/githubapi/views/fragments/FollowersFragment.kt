@@ -116,7 +116,6 @@ class FollowersFragment : Fragment() {
                 }
 
                 isLoading = true
-
             }
         }
     }

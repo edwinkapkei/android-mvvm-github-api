@@ -41,10 +41,16 @@ class UserViewModel(
                 if (apiResult.data != null) {
                     githubUser.postValue(ResourceStatus.Success(apiResult.data))
                 } else {
-                    githubUser.postValue(ResourceStatus.Error("An error occured"))
+                    githubUser.postValue(ResourceStatus.Error("An error occurred"))
                 }
             } else {
-                githubUser.postValue(ResourceStatus.Error("Internet is not available"))
+                getSavedUserUseCase.execute(username).collect {
+                    if (it != null) {
+                        githubUser.postValue(ResourceStatus.Success(it))
+                    } else {
+                        githubUser.postValue(ResourceStatus.Error("Internet is not available"))
+                    }
+                }
             }
         } catch (e: Exception) {
             githubUser.postValue(ResourceStatus.Error(e.message.toString()))
@@ -61,7 +67,13 @@ class UserViewModel(
                         getGithubUserFollowers.execute(username, followType, perPage, page)
                     userFollowers.postValue(apiResult)
                 } else {
-                    userFollowers.postValue(ResourceStatus.Error("Internet is not available"))
+                    getSavedFollowersUseCase.execute(username, followType).collect() {
+                        if (it.isNotEmpty()) {
+                            userFollowers.postValue(ResourceStatus.Success(it))
+                        } else {
+                            userFollowers.postValue(ResourceStatus.Error("Internet is not available"))
+                        }
+                    }
                 }
             } catch (e: Exception) {
                 userFollowers.postValue(ResourceStatus.Error(e.message.toString()))

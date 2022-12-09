@@ -35,7 +35,7 @@ class SearchFragment : Fragment() {
         viewModel = (activity as MainActivity).viewModel
 
         binding.searchButton.setOnClickListener {
-            val username = binding.search.text.toString()
+            val username = binding.search.text.toString().trim()
             if (username.isEmpty()) {
                 binding.searchLayout.error = "Please enter username"
                 binding.searchLayout.isErrorEnabled = true
@@ -92,7 +92,7 @@ class SearchFragment : Fragment() {
                 is ResourceStatus.Error -> {
                     hideProgressBar()
                     response.message?.let {
-                        Toast.makeText(context, "An error occurred: $it", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                     }
                 }
                 is ResourceStatus.Loading -> {
