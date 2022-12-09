@@ -1,35 +1,29 @@
 package com.edwinkapkei.githubapi.views.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.edwinkapkei.githubapi.R
+import com.edwinkapkei.githubapi.data.utilities.ResourceStatus
+import com.edwinkapkei.githubapi.databinding.FragmentFollowersBinding
+import com.edwinkapkei.githubapi.views.MainActivity
+import com.edwinkapkei.githubapi.views.adapter.FollowerAdapter
+import com.edwinkapkei.githubapi.views.viewmodel.UserViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FollowersFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FollowersFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private lateinit var binding: FragmentFollowersBinding
+    lateinit var viewModel: UserViewModel
+    lateinit var adapter: FollowerAdapter
+    private var page = 1
+    private var isLoading = false
+    private var isLastPage = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,23 +32,94 @@ class FollowersFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_followers, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FollowersFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FollowersFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentFollowersBinding.bind(view)
+
+        val args: FollowersFragmentArgs by navArgs()
+        val user = args.githubUser
+        viewModel = (activity as MainActivity).viewModel
+
+        adapter = FollowerAdapter()
+        binding.followersRecycler.adapter = adapter
+        binding.followersRecycler.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+        binding.followersRecycler.addOnScrollListener(this.onScrollListener)
+
+        user.login?.let {
+            viewModel.getUserFollowers(it, args.followType, 10, page)
+        }
+
+        observeFollowerResults()
+    }
+
+    private fun observeFollowerResults() {
+        viewModel.userFollowers.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is ResourceStatus.Success -> {
+                    hideProgressBar()
+                    response.data?.let {
+                        if (it.isEmpty() || it.size < 10)
+                            isLastPage = true
+
+                        adapter.updateList(it)
+                    }
+                }
+                is ResourceStatus.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(context, "An error occurred: $it", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                is ResourceStatus.Loading -> {
+                    showProgressBar()
                 }
             }
+        }
+    }
+
+    private val onScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val layoutManager = binding.followersRecycler.layoutManager as LinearLayoutManager
+            val sizeOfCurrentList = layoutManager.itemCount
+            val visibleItems = layoutManager.childCount
+            val topPosition = layoutManager.findFirstVisibleItemPosition()
+
+            val hasReachedEnd = topPosition + visibleItems >= sizeOfCurrentList
+            val shouldPaginate = !isLoading && !isLastPage && hasReachedEnd
+
+            if (shouldPaginate) {
+                page++
+                val args: FollowersFragmentArgs by navArgs()
+                val user = args.githubUser
+                user.login?.let {
+                    viewModel.getUserFollowers(it, args.followType, 10, page)
+                }
+
+                isLoading = true
+
+            }
+        }
+    }
+
+    private fun showProgressBar() {
+        isLoading = true
+        //binding.followersRecycler.visibility = View.GONE
+        binding.progressbar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        isLoading = false
+        //binding.followersRecycler.visibility = View.VISIBLE
+        binding.progressbar.visibility = View.GONE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.userFollowers.postValue(null)
     }
 }

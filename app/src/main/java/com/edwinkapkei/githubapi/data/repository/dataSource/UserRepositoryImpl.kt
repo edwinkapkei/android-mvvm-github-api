@@ -14,26 +14,14 @@ class UserRepositoryImpl(private val userRemoteDataSource: GithubUserRemoteDataS
 
     override suspend fun getGithubFollowers(
         username: String,
+        followType: String,
         perPage: Int,
         page: Int
     ): ResourceStatus<List<GithubFollower>> {
         return responseToFollowerResource(
             userRemoteDataSource.getUserFollowers(
                 username,
-                perPage,
-                page
-            )
-        )
-    }
-
-    override suspend fun getGithubFollowing(
-        username: String,
-        perPage: Int,
-        page: Int
-    ): ResourceStatus<List<GithubFollower>> {
-        return responseToFollowerResource(
-            userRemoteDataSource.getUserFollowing(
-                username,
+                followType,
                 perPage,
                 page
             )

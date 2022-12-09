@@ -2,7 +2,6 @@ package com.edwinkapkei.githubapi.views.di
 
 import android.app.Application
 import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserFollowers
-import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserFollowing
 import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserUseCase
 import com.edwinkapkei.githubapi.views.viewmodel.UserViewModelFactory
 import dagger.Module
@@ -21,13 +20,11 @@ class FactoryModule {
         application: Application,
         getGithubUserUseCase: GetGithubUserUseCase,
         getGithubUserFollowers: GetGithubUserFollowers,
-        getGithubUserFollowing: GetGithubUserFollowing
     ): UserViewModelFactory {
         return UserViewModelFactory(
             application,
             getGithubUserUseCase,
-            getGithubUserFollowers,
-            getGithubUserFollowing
+            getGithubUserFollowers
         )
     }
 }

@@ -12,7 +12,6 @@ import com.edwinkapkei.githubapi.data.model.GithubFollower
 import com.edwinkapkei.githubapi.data.model.GithubUser
 import com.edwinkapkei.githubapi.data.utilities.ResourceStatus
 import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserFollowers
-import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserFollowing
 import com.edwinkapkei.githubapi.domain.usecases.GetGithubUserUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +20,6 @@ class UserViewModel(
     private val app: Application,
     private val getGithubUserUseCase: GetGithubUserUseCase,
     private val getGithubUserFollowers: GetGithubUserFollowers,
-    private val getGithubUserFollowing: GetGithubUserFollowing
 ) : AndroidViewModel(app) {
 
     val githubUser: MutableLiveData<ResourceStatus<GithubUser>> = MutableLiveData()
@@ -49,35 +47,19 @@ class UserViewModel(
         }
     }
 
-    fun getUserFollowers(username: String, perPage: Int, page: Int) =
+    fun getUserFollowers(username: String, followType: String, perPage: Int, page: Int) =
         viewModelScope.launch(Dispatchers.IO) {
             userFollowers.postValue(ResourceStatus.Loading())
 
             try {
                 if (isNetworkAvailable(app)) {
-                    val apiResult = getGithubUserFollowers.execute(username, perPage, page)
+                    val apiResult = getGithubUserFollowers.execute(username, followType, perPage, page)
                     userFollowers.postValue(apiResult)
                 } else {
                     userFollowers.postValue(ResourceStatus.Error("Internet is not available"))
                 }
             } catch (e: Exception) {
                 userFollowers.postValue(ResourceStatus.Error(e.message.toString()))
-            }
-        }
-
-    fun getUserFollowing(username: String, perPage: Int, page: Int) =
-        viewModelScope.launch(Dispatchers.IO) {
-            userFollowing.postValue(ResourceStatus.Loading())
-
-            try {
-                if (isNetworkAvailable(app)) {
-                    val apiResult = getGithubUserFollowing.execute(username, perPage, page)
-                    userFollowing.postValue(apiResult)
-                } else {
-                    userFollowing.postValue(ResourceStatus.Error("Internet is not available"))
-                }
-            } catch (e: Exception) {
-                userFollowing.postValue(ResourceStatus.Error(e.message.toString()))
             }
         }
 

@@ -68,4 +68,4 @@ data class GithubUser(
     val updatedAt: String?,
     @SerializedName("url")
     val url: String?
-)
+) : java.io.Serializable

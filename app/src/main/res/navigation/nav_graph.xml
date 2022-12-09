@@ -9,26 +9,30 @@
         android:id="@+id/searchFragment"
         android:name="com.edwinkapkei.githubapi.views.fragments.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
-            android:id="@+id/action_searchFragment_to_userFragment"
-            app:destination="@id/userFragment" />
+            android:id="@+id/action_searchFragment_to_followersFragment"
+            app:destination="@id/followersFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/userFragment"
         android:name="com.edwinkapkei.githubapi.views.fragments.UserFragment"
         android:label="fragment_user"
-        tools:layout="@layout/fragment_user">
-        <action
-            android:id="@+id/action_userFragment_to_followersFragment"
-            app:destination="@id/followersFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_user"/>
 
     <fragment
         android:id="@+id/followersFragment"
         android:name="com.edwinkapkei.githubapi.views.fragments.FollowersFragment"
         android:label="fragment_followers"
-        tools:layout="@layout/fragment_followers" />
+        tools:layout="@layout/fragment_followers">
+
+        <argument
+            android:name="github_user"
+            app:argType="com.edwinkapkei.githubapi.data.model.GithubUser" />
+        <argument
+            android:name="follow_type"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

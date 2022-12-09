@@ -8,12 +8,8 @@ interface GithubUserRemoteDataSource {
     suspend fun getUser(username: String): Response<GithubUser>
     suspend fun getUserFollowers(
         username: String,
+        followType: String,
         perPage: Int,
-        page: Int
-    ): Response<List<GithubFollower>>
-
-    suspend fun getUserFollowing(
-        username: String, perPage: Int,
         page: Int
     ): Response<List<GithubFollower>>
 }

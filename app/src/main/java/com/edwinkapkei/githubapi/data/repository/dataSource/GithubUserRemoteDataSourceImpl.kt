@@ -12,16 +12,11 @@ class GithubUserRemoteDataSourceImpl(private val githubApiService: GithubApiServ
     }
 
     override suspend fun getUserFollowers(
-        username: String, perPage: Int,
+        username: String,
+        followType: String,
+        perPage: Int,
         page: Int
     ): Response<List<GithubFollower>> {
-        return githubApiService.getUserFollowers(username, perPage, page)
-    }
-
-    override suspend fun getUserFollowing(
-        username: String, perPage: Int,
-        page: Int
-    ): Response<List<GithubFollower>> {
-        return githubApiService.getUserFollowing(username, perPage, page)
+        return githubApiService.getUserFollowers(username, followType, perPage, page)
     }
 }

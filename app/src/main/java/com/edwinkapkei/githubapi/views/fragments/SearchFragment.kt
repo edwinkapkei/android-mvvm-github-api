@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.edwinkapkei.githubapi.R
 import com.edwinkapkei.githubapi.data.model.GithubUser
@@ -42,6 +43,30 @@ class SearchFragment : Fragment() {
                 binding.searchLayout.isErrorEnabled = false
                 Timber.e("Getting user")
                 viewModel.getUser(username)
+            }
+        }
+
+        binding.followers.setOnClickListener {
+            val response = viewModel.githubUser.value
+            response?.data?.let {
+                val bundle = Bundle().apply {
+                    putString("follow_type", "followers")
+                    putSerializable("github_user", it)
+                }
+
+                findNavController().navigate(R.id.action_searchFragment_to_followersFragment, bundle)
+            }
+        }
+
+        binding.following.setOnClickListener {
+            val response = viewModel.githubUser.value
+            response?.data?.let {
+                val bundle = Bundle().apply {
+                    putString("follow_type", "following")
+                    putSerializable("github_user", it)
+                }
+
+                findNavController().navigate(R.id.action_searchFragment_to_followersFragment, bundle)
             }
         }
 

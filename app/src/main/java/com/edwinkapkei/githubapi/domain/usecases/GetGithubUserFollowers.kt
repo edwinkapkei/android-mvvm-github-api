@@ -7,9 +7,10 @@ import com.edwinkapkei.githubapi.domain.repository.GithubUserRepository
 class GetGithubUserFollowers(private val userRepository: GithubUserRepository) {
     suspend fun execute(
         username: String,
+        followType: String,
         perPage: Int,
         page: Int
     ): ResourceStatus<List<GithubFollower>> {
-        return userRepository.getGithubFollowers(username, perPage, page)
+        return userRepository.getGithubFollowers(username, followType, perPage, page)
     }
 }
