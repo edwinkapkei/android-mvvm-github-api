@@ -19,7 +19,10 @@ class GithubUserLocalDataSourceImpl(private val userDao: GithubUserDao) :
         return userDao.getSavedUser(username)
     }
 
-    override fun getSavedUserFollowers(username: String): Flow<List<GithubFollower>> {
-        return userDao.getSavedUserFollowers(username)
+    override fun getSavedUserFollowers(
+        username: String,
+        followType: String
+    ): Flow<List<GithubFollower>> {
+        return userDao.getSavedUserFollowers(username, followType)
     }
 }

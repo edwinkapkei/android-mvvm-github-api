@@ -18,5 +18,5 @@ interface GithubUserRepository {
     suspend fun saveFollowers(githubFollowers: List<GithubFollower>)
 
     fun getSavedUser(username: String): Flow<GithubUser?>
-    fun getSavedFollowers(username: String): Flow<List<GithubFollower>>
+    fun getSavedFollowers(username: String, followType: String): Flow<List<GithubFollower>>
 }

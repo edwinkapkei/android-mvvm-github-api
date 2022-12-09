@@ -7,12 +7,13 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(
-    indices = [Index(value = ["login", "ownerUsername"], unique = true)]
+    indices = [Index(value = ["login", "ownerUsername", "followType"], unique = true)]
 )
 data class GithubFollower(
     @PrimaryKey(autoGenerate = true)
     val tableId: Int?,
     var ownerUsername: String?,
+    var followType: String,
     @SerializedName("avatar_url")
     val avatarUrl: String?,
     @SerializedName("events_url")

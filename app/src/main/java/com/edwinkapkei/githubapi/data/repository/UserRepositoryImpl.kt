@@ -39,15 +39,18 @@ class UserRepositoryImpl(
     }
 
     override suspend fun saveFollowers(githubFollowers: List<GithubFollower>) {
-       userLocalDataSource.saveFollowersToDB(githubFollowers)
+        userLocalDataSource.saveFollowersToDB(githubFollowers)
     }
 
     override fun getSavedUser(username: String): Flow<GithubUser?> {
         return userLocalDataSource.getSavedUserName(username)
     }
 
-    override fun getSavedFollowers(username: String): Flow<List<GithubFollower>> {
-        return userLocalDataSource.getSavedUserFollowers(username)
+    override fun getSavedFollowers(
+        username: String,
+        followType: String
+    ): Flow<List<GithubFollower>> {
+        return userLocalDataSource.getSavedUserFollowers(username, followType)
     }
 
     private fun responseToUserResource(response: Response<GithubUser>): ResourceStatus<GithubUser> {

@@ -88,7 +88,7 @@ class FollowersFragment : Fragment() {
         val args: FollowersFragmentArgs by navArgs()
         val user = args.githubUser
         user.login?.let {
-            viewModel.saveUserFollowers(user.login, githubFollowers)
+            viewModel.saveUserFollowers(user.login, args.followType, githubFollowers)
         }
     }
 

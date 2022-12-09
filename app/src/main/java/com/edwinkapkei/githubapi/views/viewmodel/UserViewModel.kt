@@ -71,10 +71,15 @@ class UserViewModel(
     fun saveUser(githubUser: GithubUser) =
         viewModelScope.launch { saveGithubUserUseCase.execute(githubUser) }
 
-    fun saveUserFollowers(username: String,githubFollowers: List<GithubFollower>) =
+    fun saveUserFollowers(
+        username: String,
+        followType: String,
+        githubFollowers: List<GithubFollower>
+    ) =
         viewModelScope.launch {
-            for (follower in githubFollowers){
+            for (follower in githubFollowers) {
                 follower.ownerUsername = username
+                follower.followType = followType
             }
             saveGithubFollowerUseCase.execute(githubFollowers)
         }
@@ -85,8 +90,8 @@ class UserViewModel(
         }
     }
 
-    fun getSavedUserFollowers(username: String) = liveData {
-        getSavedFollowersUseCase.execute(username).collect() {
+    fun getSavedUserFollowers(username: String, followType: String) = liveData {
+        getSavedFollowersUseCase.execute(username, followType).collect() {
             emit(it)
         }
     }

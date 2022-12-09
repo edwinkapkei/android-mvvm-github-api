@@ -9,5 +9,5 @@ interface GithubUserLocalDataSource {
     suspend fun saveFollowersToDB(githubFollowers: List<GithubFollower>)
 
     fun getSavedUserName(username: String): Flow<GithubUser?>
-    fun getSavedUserFollowers(username: String): Flow<List<GithubFollower>>
+    fun getSavedUserFollowers(username: String, followType: String): Flow<List<GithubFollower>>
 }

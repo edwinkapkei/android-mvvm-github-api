@@ -17,8 +17,8 @@ interface GithubUserDao {
     suspend fun insertFollowers(githubFollower: List<GithubFollower>)
 
     @Query("SELECT * FROM githubuser WHERE login=:username")
-     fun getSavedUser(username: String): Flow<GithubUser>
+    fun getSavedUser(username: String): Flow<GithubUser>
 
-    @Query("SELECT * FROM githubfollower WHERE ownerUsername=:username")
-     fun getSavedUserFollowers(username: String): Flow<List<GithubFollower>>
+    @Query("SELECT * FROM githubfollower WHERE ownerUsername=:username AND followType=:followType")
+    fun getSavedUserFollowers(username: String, followType: String): Flow<List<GithubFollower>>
 }

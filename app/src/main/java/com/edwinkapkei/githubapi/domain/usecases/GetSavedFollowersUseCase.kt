@@ -5,7 +5,7 @@ import com.edwinkapkei.githubapi.domain.repository.GithubUserRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetSavedFollowersUseCase(private val userRepository: GithubUserRepository) {
-    suspend fun execute(username: String): Flow<List<GithubFollower>> {
-        return userRepository.getSavedFollowers(username)
+    fun execute(username: String, followType: String): Flow<List<GithubFollower>> {
+        return userRepository.getSavedFollowers(username, followType)
     }
 }
