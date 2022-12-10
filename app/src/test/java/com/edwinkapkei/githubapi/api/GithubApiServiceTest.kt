@@ -44,7 +44,7 @@ class GithubApiServiceTest {
     fun getGithubUserFollowers() {
         runBlocking {
             enqueueMockResponse("github_user_following_followers.json")
-            val responseBody = apiService.getUserFollowers("edwinkapkei",10,1).body()
+            val responseBody = apiService.getUserFollowers("edwinkapkei", "followers", 10, 1).body()
             assertThat(responseBody).isNotNull()
 
             val follower = responseBody!![0]
@@ -59,7 +59,7 @@ class GithubApiServiceTest {
     fun getGithubUserFollowing() {
         runBlocking {
             enqueueMockResponse("github_user_following_followers.json")
-            val responseBody = apiService.getUserFollowing("edwinkapkei",10,1).body()
+            val responseBody = apiService.getUserFollowers("edwinkapkei", "following", 10, 1).body()
             assertThat(responseBody).isNotNull()
 
             val follower = responseBody!![0]
