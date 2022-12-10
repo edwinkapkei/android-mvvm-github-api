@@ -10,3 +10,4 @@ Improvements TODO:
 - Refactor offline records schema for followers and following lists
 - Improve error handling for api request errors
 - Extend coverage of tests
+- CI/CD pipeline
