@@ -67,7 +67,7 @@ class UserViewModel(
                         getGithubUserFollowers.execute(username, followType, perPage, page)
                     userFollowers.postValue(apiResult)
                 } else {
-                    getSavedFollowersUseCase.execute(username, followType).collect() {
+                    getSavedFollowersUseCase.execute(username, followType).collect {
                         if (it.isNotEmpty()) {
                             userFollowers.postValue(ResourceStatus.Success(it))
                         } else {

@@ -7,6 +7,7 @@ import com.edwinkapkei.githubapi.data.repository.dataSource.GithubUserRemoteData
 import com.edwinkapkei.githubapi.data.utilities.ResourceStatus
 import com.edwinkapkei.githubapi.domain.repository.GithubUserRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 class UserRepositoryImpl(
@@ -43,14 +44,20 @@ class UserRepositoryImpl(
     }
 
     override fun getSavedUser(username: String): Flow<GithubUser?> {
-        return userLocalDataSource.getSavedUserName(username)
+        return flow {
+            val result = userLocalDataSource.getSavedUserName(username)
+            emit(result)
+        }
     }
 
     override fun getSavedFollowers(
         username: String,
         followType: String
     ): Flow<List<GithubFollower>> {
-        return userLocalDataSource.getSavedUserFollowers(username, followType)
+        return flow {
+            val result = userLocalDataSource.getSavedUserFollowers(username, followType)
+            emit(result)
+        }
     }
 
     private fun responseToUserResource(response: Response<GithubUser>): ResourceStatus<GithubUser> {

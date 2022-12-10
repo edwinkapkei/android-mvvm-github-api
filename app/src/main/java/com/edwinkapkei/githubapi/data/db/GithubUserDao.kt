@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.edwinkapkei.githubapi.data.model.GithubFollower
 import com.edwinkapkei.githubapi.data.model.GithubUser
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GithubUserDao {
@@ -17,8 +16,8 @@ interface GithubUserDao {
     suspend fun insertFollowers(githubFollower: List<GithubFollower>)
 
     @Query("SELECT * FROM githubuser WHERE login=:username")
-    fun getSavedUser(username: String): Flow<GithubUser>
+    fun getSavedUser(username: String): GithubUser?
 
     @Query("SELECT * FROM githubfollower WHERE ownerUsername=:username AND followType=:followType")
-    fun getSavedUserFollowers(username: String, followType: String): Flow<List<GithubFollower>>
+    fun getSavedUserFollowers(username: String, followType: String): List<GithubFollower>
 }

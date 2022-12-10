@@ -49,7 +49,9 @@ class FollowersFragment : Fragment() {
                 LinearLayoutManager.VERTICAL
             )
         )
-        binding.followersRecycler.addOnScrollListener(this.onScrollListener)
+
+        if (viewModel.isNetworkAvailable(requireContext()))
+            binding.followersRecycler.addOnScrollListener(this.onScrollListener)
 
         user.login?.let {
             viewModel.getUserFollowers(it, args.followType, 10, page)

@@ -3,7 +3,6 @@ package com.edwinkapkei.githubapi.data.repository.dataSource
 import com.edwinkapkei.githubapi.data.db.GithubUserDao
 import com.edwinkapkei.githubapi.data.model.GithubFollower
 import com.edwinkapkei.githubapi.data.model.GithubUser
-import kotlinx.coroutines.flow.Flow
 
 class GithubUserLocalDataSourceImpl(private val userDao: GithubUserDao) :
     GithubUserLocalDataSource {
@@ -15,14 +14,14 @@ class GithubUserLocalDataSourceImpl(private val userDao: GithubUserDao) :
         userDao.insertFollowers(githubFollowers)
     }
 
-    override fun getSavedUserName(username: String): Flow<GithubUser?> {
+    override fun getSavedUserName(username: String): GithubUser? {
         return userDao.getSavedUser(username)
     }
 
     override fun getSavedUserFollowers(
         username: String,
         followType: String
-    ): Flow<List<GithubFollower>> {
+    ): List<GithubFollower> {
         return userDao.getSavedUserFollowers(username, followType)
     }
 }
