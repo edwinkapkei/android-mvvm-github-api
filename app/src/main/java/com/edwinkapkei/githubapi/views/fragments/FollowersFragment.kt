@@ -41,6 +41,9 @@ class FollowersFragment : Fragment() {
         val user = args.githubUser
         viewModel = (activity as MainActivity).viewModel
 
+        (activity as MainActivity).supportActionBar?.title =
+            args.followType.replaceFirstChar { it.uppercase() }
+
         adapter = FollowerAdapter()
         binding.followersRecycler.adapter = adapter
         binding.followersRecycler.addItemDecoration(

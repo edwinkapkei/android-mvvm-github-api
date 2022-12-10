@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.edwinkapkei.githubapi.views.fragments.SearchFragment"
-        android:label="Search Github User"
         tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_followersFragment"
@@ -18,7 +17,6 @@
     <fragment
         android:id="@+id/followersFragment"
         android:name="com.edwinkapkei.githubapi.views.fragments.FollowersFragment"
-        android:label="Followers"
         tools:layout="@layout/fragment_followers">
 
         <argument

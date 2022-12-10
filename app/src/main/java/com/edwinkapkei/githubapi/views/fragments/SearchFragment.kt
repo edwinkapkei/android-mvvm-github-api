@@ -33,7 +33,7 @@ class SearchFragment : Fragment() {
         binding = FragmentSearchBinding.bind(view)
 
         viewModel = (activity as MainActivity).viewModel
-
+        (activity as MainActivity).supportActionBar?.title = "Search GitHub User"
         binding.searchButton.setOnClickListener {
             val username = binding.search.text.toString().trim()
             if (username.isEmpty()) {
