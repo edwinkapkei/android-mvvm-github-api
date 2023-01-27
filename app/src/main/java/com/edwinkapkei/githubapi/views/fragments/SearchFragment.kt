@@ -13,6 +13,7 @@ import com.edwinkapkei.githubapi.data.model.GithubUser
 import com.edwinkapkei.githubapi.data.utilities.ResourceStatus
 import com.edwinkapkei.githubapi.databinding.FragmentSearchBinding
 import com.edwinkapkei.githubapi.views.MainActivity
+import com.edwinkapkei.githubapi.views.extensions.hideKeyboard
 import com.edwinkapkei.githubapi.views.viewmodel.UserViewModel
 import timber.log.Timber
 
@@ -35,6 +36,8 @@ class SearchFragment : Fragment() {
         viewModel = (activity as MainActivity).viewModel
         (activity as MainActivity).supportActionBar?.title = "Search GitHub User"
         binding.searchButton.setOnClickListener {
+            hideKeyboard()
+
             val username = binding.search.text.toString().trim()
             if (username.isEmpty()) {
                 binding.searchLayout.error = "Please enter username"
